@@ -16,7 +16,7 @@ def generate_chart(audio_path: str, chart: Chart) -> None:
     times = get_metronome_ticks(audio_path)
     if chart.skip > 0:
         print(f"[{chart.id}] Skipping beats...")
-        times = times[skip:]
+        times = times[chart.skip:]
     print(f"[{chart.id}] Syncing track...")
     track = sync_track(times)
     print(f"[{chart.id}] Generating chart file...")
