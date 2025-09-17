@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import uuid
 
 from lib.charter import generate_chart
@@ -6,7 +6,7 @@ from model.chart import Chart
 from service.validate_chart import validate_chart
 from service.save_tmp import save_tmp_file
 from exception.validation import ValidationException
-from lib.constants import MAX_BPM_FILE_SIZE
+from lib.constants import MAX_BPM_FILE_SIZE, UPLOADS_PATH
 from service.clear_cache import clear_cache
 
 app = Flask(__name__)
@@ -54,7 +54,9 @@ def create_chart():
         clear_cache(id)
         return jsonify(response), code
     
-    
+@app.route("/charts/<string:id>")
+def download_chart(id: str):
+    return send_from_directory(UPLOADS_PATH, f"{id}-notes.chart", as_attachment=True)
 
 @app.errorhandler(413)
 def request_entity_too_large():
